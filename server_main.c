@@ -2,14 +2,20 @@
 
 #include <stdio.h>
 #include "common_socket.h"
+#include "common_cesar.h"
+#include "common_vigenere.h"
+#include "common_rc4.h"
 
 void recibir_mensaje(socket_t* socket) {
 
-	unsigned char buffer[TAM_BUFFER];
+	unsigned char buffer[TAM_BUFFER], key[15] = "Key";
 	int recibidos = 0;
 
 	do{
 		recibidos = socket_recibir(socket, buffer, TAM_BUFFER);
+//		cesar_desencodear(240, buffer, recibidos);
+//		vigenere_desencodear(key, buffer, recibidos);
+		rc4_desencodear(key, buffer, recibidos);
 		fwrite(buffer, 1, recibidos, stdout);
 	} while (recibidos > 0);
 }

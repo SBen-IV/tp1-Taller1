@@ -4,26 +4,24 @@
 #include <stdbool.h>
 #include "common_socket.h"
 #include "common_cesar.h"
+#include "common_vigenere.h"
+#include "common_rc4.h"
 
 #define SUCCESS 0
 #define ERROR -1
 
 void enviar_mensaje(socket_t* socket){
 
-	unsigned char buffer[TAM_BUFFER];
+	unsigned char buffer[TAM_BUFFER], key[15] = "Key";
 	int leidos, bytes_enviados = 0;
-	bool socket_abierto = true;
 
 	do {
 		leidos = fread(buffer, 1, TAM_BUFFER, stdin);
-	//	cesar_encodear(5, buffer, leidos);
-		while (leidos > bytes_enviados && socket_abierto) {
-			bytes_enviados += socket_enviar(socket,
-		 					&buffer[bytes_enviados], leidos-bytes_enviados,
-		 					&socket_abierto);
-		}
-		bytes_enviados = 0;	
-	}while (leidos > 0 && socket_abierto);
+//		cesar_encodear(240, buffer, leidos);
+//		vigenere_encodear(key, buffer, leidos);
+		rc4_encodear(key, buffer, leidos);
+		bytes_enviados = socket_enviar(socket, buffer, leidos);
+	}while (bytes_enviados > 0);
 }
 
 

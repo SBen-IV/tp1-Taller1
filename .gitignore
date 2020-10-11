@@ -13,3 +13,6 @@ cesar
 Tests/
 casos/
 salidas/
+
+#Archivos de texto
+*.txt

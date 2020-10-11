@@ -12,7 +12,7 @@
 int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 						int flag) {
 
-	memset(&(skt->hints), 0, sizeof(struct addrinfo));
+	memset(skt, 0, sizeof(socket_t));
 	skt->hints.ai_family = AF_INET;
 	skt->hints.ai_socktype = SOCK_STREAM;
 	skt->hints.ai_flags = flag;
@@ -85,28 +85,54 @@ int socket_conectar_con_cliente(socket_t* skt) {
 int socket_recibir(socket_t* skt, unsigned char buffer[TAM_BUFFER],
 					size_t bytes_a_recibir) {
 
-	return recv(skt->peer, buffer, bytes_a_recibir, 0);
-}
+	int bytes_recibidos = 0, total_bytes_recibidos = 0;
+	bool socket_abierto = true;
+	
+	while (bytes_recibidos < bytes_a_recibir && socket_abierto){
+		bytes_recibidos = recv(skt->peer, &buffer[total_bytes_recibidos],
+								bytes_a_recibir-total_bytes_recibidos, 0);
 
-int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
-					bool* socket_abierto){
-
-	int bytes_enviados = send(skt->s, mensaje, largo, MSG_NOSIGNAL);
-
-	if (bytes_enviados == ERROR) {
-		perror("Cerrando socket");
-		(*socket_abierto) = false;
-		return ERROR;
-	} else if (bytes_enviados == SOCKET_CERRADO) {
-		printf("Socket cerrado\n");
-		(*socket_abierto) = false;
-		return SOCKET_CERRADO;
+		if (bytes_recibidos == ERROR) {
+			perror("Error");
+			socket_abierto = false;
+		} else if (bytes_recibidos == SOCKET_CERRADO) {
+			socket_abierto = false;
+		} else {
+			total_bytes_recibidos += bytes_recibidos;
+		}
 	}
 
-	return bytes_enviados;
+	return total_bytes_recibidos;
+}
+
+int socket_enviar(socket_t* skt, unsigned char mensaje[TAM_BUFFER],
+					size_t bytes_a_enviar){
+
+	int bytes_enviados = 0, total_bytes_enviados = 0;
+	bool socket_abierto = true;
+
+	while (bytes_enviados < bytes_a_enviar && socket_abierto) {
+		bytes_enviados = send(skt->s, &mensaje[total_bytes_enviados],
+								bytes_a_enviar-total_bytes_enviados,
+								MSG_NOSIGNAL);
+
+		if (bytes_enviados == ERROR) {
+			perror("Cerrando socket");
+			socket_abierto = false;
+		} else if (bytes_enviados == SOCKET_CERRADO) {
+			printf("Socket cerrado");
+			socket_abierto = false;
+		} else {
+			total_bytes_enviados += bytes_enviados;
+		}
+	}
+
+	return total_bytes_enviados;
 }
 
 int socket_destruir(socket_t* skt) {
+
+	if(skt->peer) close(skt->peer);
 	close(skt->s);
 	freeaddrinfo(skt->resultado);
 
