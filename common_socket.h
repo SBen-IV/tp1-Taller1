@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct socket{
 	struct addrinfo hints;
@@ -16,7 +17,8 @@ typedef struct socket{
 //Pre: Declarar skt
 //Post: Devuelve 0 en caso que se socket se haya inicializado
 //correctamente, -1 en caso contrario
-int socket_inicializar(socket_t* skt, const char* ip, const char* puerto);
+int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
+						int flag);
 
 
 //Pre: skt inicializado
@@ -24,8 +26,10 @@ int socket_inicializar(socket_t* skt, const char* ip, const char* puerto);
 int socket_conectar(socket_t* skt);
 
 
-
-int socket_enviar_mensaje(socket_t* skt, char* buffer, int largo);
+//Pre: skt inicializado, mensaje no está vacío, largo > 0
+//Post: Envia mensaje al servidor especificado en socket_inicialzar
+int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
+					bool* socket_abierto);
 
 
 //Pre: skt fue inicializado

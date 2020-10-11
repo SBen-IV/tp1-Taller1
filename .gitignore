@@ -2,3 +2,4 @@ Makefile
 client
 cesar
 *.o
+Tests/

@@ -7,14 +7,17 @@
 #define ERROR -1
 #define SUCCESS 0
 
+#define SOCKET_CERRADO 0
+
 #define TAM_BUFFER 10
 
-int socket_inicializar(socket_t* skt, const char* ip, const char* puerto){
+int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
+						int flag){
 
 	memset(&(skt->hints), 0, sizeof(struct addrinfo));
 	skt->hints.ai_family = AF_INET;
 	skt->hints.ai_socktype = SOCK_STREAM;
-	skt->hints.ai_flags = 0;
+	skt->hints.ai_flags = flag;
 
 	int estado = getaddrinfo(ip, puerto, &(skt->hints), &(skt->resultado));
 	if (estado != 0) {
@@ -53,10 +56,22 @@ int socket_destruir(socket_t* skt){
 	return SUCCESS;
 }
 
+int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
+					bool* socket_abierto){
 
-int socket_enviar_mensaje(socket_t* skt, char* buffer, int largo){
+	int bytes_enviados = send(skt->s, mensaje, largo, MSG_NOSIGNAL);
 
-	return send(skt->s, buffer, largo, MSG_NOSIGNAL);
+	if (bytes_enviados == ERROR) {
+		perror("Cerrando socket");
+		(*socket_abierto) = false;
+		return ERROR;
+	} else if (bytes_enviados == SOCKET_CERRADO) {
+		printf("Socket cerrado\n");
+		(*socket_abierto) = false;
+		return SOCKET_CERRADO;
+	}
+
+	return bytes_enviados;
 }
 /*
 int s = socket(resultado->ai_family, resultado->ai_socktype, resultado->ai_protocol);
