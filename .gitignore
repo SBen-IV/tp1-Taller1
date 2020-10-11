@@ -1,5 +1,15 @@
+#Makefile
 Makefile
+
+#Ejecutables
 client
+server
 cesar
+
+#Archivo .o
 *.o
+
+#Carpetas de pruebas
 Tests/
+casos/
+salidas/

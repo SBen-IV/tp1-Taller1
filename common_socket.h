@@ -8,10 +8,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define TAM_BUFFER 2
+
 typedef struct socket{
 	struct addrinfo hints;
 	struct addrinfo* resultado;
 	int s;
+	int peer;
 }socket_t;
 
 //Pre: Declarar skt
@@ -26,9 +29,20 @@ int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 int socket_conectar(socket_t* skt);
 
 
+int socket_enlazar(socket_t* skt);
+
+
+int socket_conectar_con_cliente(socket_t* skt);
+
+
+
+int socket_recibir(socket_t* skt, unsigned char buffer[TAM_BUFFER], 
+					size_t bytes_a_recibir);
+
+
 //Pre: skt inicializado, mensaje no está vacío, largo > 0
 //Post: Envia mensaje al servidor especificado en socket_inicialzar
-int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
+int socket_enviar(socket_t* skt, unsigned char mensaje[TAM_BUFFER], int largo,
 					bool* socket_abierto);
 
 

@@ -5,7 +5,6 @@
 #include "common_socket.h"
 #include "common_cesar.h"
 
-#define TAM_BUFFER 1
 #define SUCCESS 0
 #define ERROR -1
 
@@ -17,7 +16,7 @@ void enviar_mensaje(socket_t* socket){
 
 	do {
 		leidos = fread(buffer, 1, TAM_BUFFER, stdin);
-		cesar_encodear(5, buffer, leidos);
+	//	cesar_encodear(5, buffer, leidos);
 		while (leidos > bytes_enviados && socket_abierto) {
 			bytes_enviados += socket_enviar(socket,
 		 					&buffer[bytes_enviados], leidos-bytes_enviados,

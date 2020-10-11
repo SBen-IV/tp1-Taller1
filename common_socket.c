@@ -9,10 +9,8 @@
 
 #define SOCKET_CERRADO 0
 
-#define TAM_BUFFER 10
-
 int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
-						int flag){
+						int flag) {
 
 	memset(&(skt->hints), 0, sizeof(struct addrinfo));
 	skt->hints.ai_family = AF_INET;
@@ -28,7 +26,7 @@ int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 	return SUCCESS;
 }
 
-int socket_conectar(socket_t* skt){
+int socket_conectar(socket_t* skt) {
 
 	skt->s = socket(skt->resultado->ai_family,
 					skt->resultado->ai_socktype, 
@@ -49,11 +47,45 @@ int socket_conectar(socket_t* skt){
 	return SUCCESS;
 }
 
-int socket_destruir(socket_t* skt){
-	close(skt->s);
-	freeaddrinfo(skt->resultado);
+int socket_enlazar(socket_t* skt) {
+	skt->s = socket(skt->resultado->ai_family,
+					skt->resultado->ai_socktype, 
+					skt->resultado->ai_protocol);
+
+	if (skt->s == ERROR) {
+		freeaddrinfo(skt->resultado);
+		return ERROR;	
+	}
+
+	if (bind(skt->s, skt->resultado->ai_addr,
+				skt->resultado->ai_addrlen) != SUCCESS) {
+		return ERROR;
+	}
+
+	printf("Conectado!\n");
 
 	return SUCCESS;
+}
+
+int socket_conectar_con_cliente(socket_t* skt) {
+
+	if (listen(skt->s, 1) == SUCCESS){
+		skt->peer = accept(skt->s, skt->resultado->ai_addr,
+							&(skt->resultado->ai_addrlen));
+
+		if (skt->peer == ERROR) {
+			perror("Error al conectar con cliente");
+			return ERROR;
+		}
+	}
+
+	return SUCCESS;
+}
+
+int socket_recibir(socket_t* skt, unsigned char buffer[TAM_BUFFER],
+					size_t bytes_a_recibir) {
+
+	return recv(skt->peer, buffer, bytes_a_recibir, 0);
 }
 
 int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
@@ -73,6 +105,14 @@ int socket_enviar(socket_t* skt, unsigned char* mensaje, int largo,
 
 	return bytes_enviados;
 }
+
+int socket_destruir(socket_t* skt) {
+	close(skt->s);
+	freeaddrinfo(skt->resultado);
+
+	return SUCCESS;
+}
+
 /*
 int s = socket(resultado->ai_family, resultado->ai_socktype, resultado->ai_protocol);
 
