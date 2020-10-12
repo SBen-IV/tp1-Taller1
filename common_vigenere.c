@@ -1,7 +1,6 @@
 #include "common_vigenere.h"
 
 void vigenere_encodear(void* key, unsigned char* msg, size_t tope){
-
 	unsigned char* _key = key;
 
 	size_t len_key = strlen((char*)_key), j = 0;
@@ -13,7 +12,6 @@ void vigenere_encodear(void* key, unsigned char* msg, size_t tope){
 }
 
 void vigenere_desencodear(void* key, unsigned char* msg, size_t tope){
-
 	unsigned char* _key = key;
 
 	size_t len_key = strlen((char*)key), j = 0;
@@ -23,4 +21,3 @@ void vigenere_desencodear(void* key, unsigned char* msg, size_t tope){
 		msg[i] = (msg[i] - _key[j])%256;
 	}
 }
-

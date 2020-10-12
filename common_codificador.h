@@ -26,7 +26,6 @@ void codificador_encodear(codificador_t* codificador, unsigned char* mensaje,
 void codificador_desencodear(codificador_t* codificador,
 							unsigned char* mensaje, size_t largo_mensaje);
 
-
 int codificador_destruir(codificador_t* codificador);
 
 #endif

@@ -9,7 +9,6 @@
 #define ERROR -1
 
 void recibir_mensaje(socket_t* socket, codificador_t* codificador) {
-
 	unsigned char buffer[TAM_BUFFER], buffer_desencriptado[TAM_BUFFER];
 	int recibidos = 0;
 
@@ -24,7 +23,6 @@ void recibir_mensaje(socket_t* socket, codificador_t* codificador) {
 
 
 int main(int argc, char *argv[]) {
-
 	if (argc < 4){
 		printf("./server <puerto> --method=<metodo> --key=<key>\n");
 		return 0;

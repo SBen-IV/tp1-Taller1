@@ -8,8 +8,8 @@
 #define SUCCESS 0
 #define ERROR -1
 
-int codificador_inicializar(codificador_t* codificador, char* metodo, void* key) {
-
+int codificador_inicializar(codificador_t* codificador, char* metodo,
+							void* key) {
 	codificador->key = key;
 
 	if (strcmp(metodo, METODO_CESAR) == 0) {
@@ -30,17 +30,14 @@ int codificador_inicializar(codificador_t* codificador, char* metodo, void* key)
 
 void codificador_encodear(codificador_t* codificador, unsigned char* mensaje,
 						size_t largo_mensaje) {
-
 	codificador->encodear(codificador->key, mensaje, largo_mensaje);
 }
 
 void codificador_desencodear(codificador_t* codificador, unsigned char* mensaje,
 						size_t largo_mensaje) {
-
 	codificador->desencodear(codificador->key, mensaje, largo_mensaje);
 }
 
 int codificador_destruir(codificador_t* codificador) {
-
 	return 0;
 }

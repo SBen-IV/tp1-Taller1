@@ -11,12 +11,11 @@
 #define TAM_KEY 100
 
 void enviar_mensaje(socket_t* socket, codificador_t* codificador) {
-
 	unsigned char buffer[TAM_BUFFER], buffer_encriptado[TAM_BUFFER];
-	int leidos, bytes_enviados = 0;
+	int bytes_enviados = 0;
 
 	do {
-		leidos = fread(buffer, 1, TAM_BUFFER, stdin);
+		int leidos = fread(buffer, 1, TAM_BUFFER, stdin);
 		strncpy((char*)buffer_encriptado, (char*)buffer, leidos);
 
 		codificador_encodear(codificador, buffer_encriptado, leidos);
@@ -25,7 +24,6 @@ void enviar_mensaje(socket_t* socket, codificador_t* codificador) {
 }
 
 int main(int argc, char *argv[]) {
-	
 	if (argc < 5){
 		printf("./client <ip> <puerto> --method=<metodo> --key=<key>\n");
 		return 0;

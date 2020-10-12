@@ -3,7 +3,6 @@
 #define TAM_S_BOX 256
 
 static void swap(unsigned char* string, size_t i, size_t j) {
-
 	unsigned char aux = string[i];
 	string[i] = string[j];
 	string[j] = aux;
@@ -11,7 +10,6 @@ static void swap(unsigned char* string, size_t i, size_t j) {
 
 static void inicializar_s_box(unsigned char s_box[], unsigned char* key,
 					size_t largo_key) {
-
 	size_t i, j;
 
 	for (i = 0; i < TAM_S_BOX; i++) s_box[i] = i;
@@ -23,7 +21,6 @@ static void inicializar_s_box(unsigned char s_box[], unsigned char* key,
 }
 
 static void code(unsigned char* s_box, unsigned char* buffer, size_t tope) {
-
 	size_t i, j;
 
 	i = j = 0;
@@ -39,7 +36,6 @@ static void code(unsigned char* s_box, unsigned char* buffer, size_t tope) {
 }
 
 void rc4_encodear(void* key, unsigned char* buffer, size_t tope) {
-
 	unsigned char s_box[TAM_S_BOX], *_key = key;
 
 	inicializar_s_box(s_box, key, strlen((char*)_key));
@@ -48,7 +44,6 @@ void rc4_encodear(void* key, unsigned char* buffer, size_t tope) {
 }
 
 void rc4_desencodear(void* key, unsigned char* buffer, size_t tope) {
-
 	unsigned char s_box[TAM_S_BOX], *_key = key;
 
 	inicializar_s_box(s_box, key, strlen((char*)_key));

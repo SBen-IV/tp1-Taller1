@@ -6,9 +6,6 @@
 
 void vigenere_encodear(void* key, unsigned char* msg, size_t tope);
 
-
-
 void vigenere_desencodear(void* key, unsigned char* msg, size_t tope);
-
 
 #endif
