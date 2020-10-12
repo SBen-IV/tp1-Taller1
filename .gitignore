@@ -6,8 +6,9 @@ client
 server
 cesar
 
-#Archivo .o
+#Archivos extra 
 *.o
+*.zip
 
 #Carpetas de pruebas
 Tests/

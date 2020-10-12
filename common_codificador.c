@@ -11,6 +11,7 @@
 int codificador_inicializar(codificador_t* codificador, char* metodo,
 							void* key) {
 	codificador->key = key;
+	codificador->pos_key = 0;
 
 	if (strcmp(metodo, METODO_CESAR) == 0) {
 		codificador->encodear = cesar_encodear;
@@ -30,12 +31,14 @@ int codificador_inicializar(codificador_t* codificador, char* metodo,
 
 void codificador_encodear(codificador_t* codificador, unsigned char* mensaje,
 						size_t largo_mensaje) {
-	codificador->encodear(codificador->key, mensaje, largo_mensaje);
+	codificador->encodear(codificador->key, mensaje, largo_mensaje,
+							codificador->pos_key);
 }
 
-void codificador_desencodear(codificador_t* codificador, unsigned char* mensaje,
-						size_t largo_mensaje) {
-	codificador->desencodear(codificador->key, mensaje, largo_mensaje);
+void codificador_desencodear(codificador_t* codificador,
+							unsigned char* mensaje,	size_t largo_mensaje) {
+	codificador->desencodear(codificador->key, mensaje, largo_mensaje,
+							codificador->pos_key);
 }
 
 int codificador_destruir(codificador_t* codificador) {

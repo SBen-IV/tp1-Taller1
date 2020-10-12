@@ -9,16 +9,14 @@
 #define TAM_METODO 9
 
 typedef struct codificador{
-
 	void* key;
+	size_t pos_key;
 	void (*encodear)(void* , unsigned char*, size_t);
 	void (*desencodear)(void* , unsigned char*, size_t);
 }codificador_t;
 
-
 int codificador_inicializar(codificador_t* codificador,
 							char metodo[TAM_METODO], void* key);
-
 
 void codificador_encodear(codificador_t* codificador, unsigned char* mensaje,
 						size_t largo_mensaje);

@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define TAM_BUFFER 5
+#define TAM_BUFFER 64
 
 typedef struct socket{
 	struct addrinfo hints;

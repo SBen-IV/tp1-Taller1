@@ -8,8 +8,6 @@
 #define SUCCESS 0
 #define ERROR -1
 
-#define TAM_KEY 100
-
 void enviar_mensaje(socket_t* socket, codificador_t* codificador) {
 	unsigned char buffer[TAM_BUFFER], buffer_encriptado[TAM_BUFFER];
 	int bytes_enviados = 0;
