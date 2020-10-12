@@ -3,11 +3,11 @@
 
 
 
-void cesar_encodear(int key, unsigned char* msg, size_t tope);
+void cesar_encodear(void* key, unsigned char* msg, size_t tope);
 
 
 
-void cesar_desencodear(int key, unsigned char* msg, size_t tope);
+void cesar_desencodear(void* key, unsigned char* msg, size_t tope);
 
 
 #endif

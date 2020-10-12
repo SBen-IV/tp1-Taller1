@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stddef.h>
 
-void rc4_encodear(unsigned char* key, unsigned char* buffer, size_t tope);
+void rc4_encodear(void* key, unsigned char* buffer, size_t tope);
 
-void rc4_desencodear(unsigned char* key, unsigned char* buffer, size_t tope);
+void rc4_desencodear(void* key, unsigned char* buffer, size_t tope);
 
 #endif

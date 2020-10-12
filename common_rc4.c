@@ -9,7 +9,7 @@ static void swap(unsigned char* string, size_t i, size_t j) {
 	string[j] = aux;
 }
 
-static void inicializar(unsigned char s_box[], unsigned char* key,
+static void inicializar_s_box(unsigned char s_box[], unsigned char* key,
 					size_t largo_key) {
 
 	size_t i, j;
@@ -39,20 +39,20 @@ static void code(unsigned char* s_box, unsigned char* buffer, size_t tope) {
 }
 
 
-void rc4_encodear(unsigned char* key, unsigned char* buffer, size_t tope) {
+void rc4_encodear(void* key, unsigned char* buffer, size_t tope) {
 
-	unsigned char s_box[TAM_S_BOX];
+	unsigned char s_box[TAM_S_BOX], *_key = key;
 
-	inicializar(s_box, key, strlen((char*)key));
+	inicializar_s_box(s_box, key, strlen((char*)_key));
 
 	code(s_box, buffer, tope);
 }
 
-void rc4_desencodear(unsigned char* key, unsigned char* buffer, size_t tope) {
+void rc4_desencodear(void* key, unsigned char* buffer, size_t tope) {
 
-	unsigned char s_box[TAM_S_BOX];
+	unsigned char s_box[TAM_S_BOX], *_key = key;
 
-	inicializar(s_box, key, strlen((char*)key));
+	inicializar_s_box(s_box, key, strlen((char*)_key));
 	
 	code(s_box, buffer, tope);
 }

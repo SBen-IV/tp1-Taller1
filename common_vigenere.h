@@ -4,11 +4,11 @@
 #include <stddef.h>
 #include <string.h>
 
-void vigenere_encodear(unsigned char* key, unsigned char* msg, size_t tope);
+void vigenere_encodear(void* key, unsigned char* msg, size_t tope);
 
 
 
-void vigenere_desencodear(unsigned char* key, unsigned char* msg, size_t tope);
+void vigenere_desencodear(void* key, unsigned char* msg, size_t tope);
 
 
 #endif
