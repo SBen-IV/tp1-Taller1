@@ -38,7 +38,6 @@ static void code(unsigned char* s_box, unsigned char* buffer, size_t tope) {
 	}
 }
 
-
 void rc4_encodear(void* key, unsigned char* buffer, size_t tope) {
 
 	unsigned char s_box[TAM_S_BOX], *_key = key;

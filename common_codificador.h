@@ -6,7 +6,6 @@
 #include "common_vigenere.h"
 #include "common_rc4.h"
 
-//#define TAM_S_BOX 256
 #define TAM_METODO 9
 
 typedef struct codificador{

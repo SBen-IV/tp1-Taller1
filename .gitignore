@@ -13,6 +13,7 @@ cesar
 Tests/
 casos/
 salidas/
+salidas_obtenidas/
 
 #Archivos de texto
 *.txt

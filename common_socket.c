@@ -42,8 +42,6 @@ int socket_conectar(socket_t* skt) {
 		return ERROR;
 	}
 
-	printf("Conectado!\n");
-
 	return SUCCESS;
 }
 
@@ -61,8 +59,6 @@ int socket_enlazar(socket_t* skt) {
 				skt->resultado->ai_addrlen) != SUCCESS) {
 		return ERROR;
 	}
-
-	printf("Conectado!\n");
 
 	return SUCCESS;
 }
