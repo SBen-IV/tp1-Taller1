@@ -8,28 +8,32 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define TAM_BUFFER 64
+#define TAM_BUFFER 5
+
+typedef int (*funcion_enlazadora_t)(int, const struct sockaddr*, socklen_t);
 
 typedef struct socket{
 	struct addrinfo hints;
 	struct addrinfo* resultado;
-	int s;
+	int file_descriptor;
 	int peer;
+	funcion_enlazadora_t enlazar;
 }socket_t;
 
-//Pre: Declarar skt.
-//Post: Devuelve 0 en caso que se socket se haya inicializado
+//Pre: Declarar skt, flag = AI_PASSIVE para servidor, 0 para cliente.
+//Post: Devuelve 0 en caso que socket se haya inicializado
 //correctamente, -1 en caso contrario.
 int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 						int flag);
 
 //Pre: skt inicializado.
-//Post: Se conecta al servidor pasado en inicializar.
+//Post:
+//	- Como cliente: establece conexión con el servidor.
+//	- Como servidor: obtiene un file_descriptor para ser usado por 
+//	socket_conectar_con_cliente.
+//	- En ambos casos devuelve 0 si se completó correctamente, -1 en caso
+//	de error.
 int socket_conectar(socket_t* skt);
-
-//Pre: skt inicializado.
-//Post: Devuelve 0 si pudo abrir el servidor, -1 si hubo algún error.
-int socket_enlazar(socket_t* skt);
 
 //Pre: skt está enlazado.
 //Post: Devuelve 0 en caso de haber conectado satisfactoriamente con el
@@ -42,10 +46,10 @@ int socket_conectar_con_cliente(socket_t* skt);
 int socket_recibir(socket_t* skt, unsigned char buffer[TAM_BUFFER], 
 					size_t bytes_a_recibir);
 
-//Pre: skt inicializado, mensaje no está vacío.
+//Pre: skt inicializado.
 //Post: evuelve la cantidad de bytes enciados, 0 en caso de que
 //se haya perdido la conexión con el servidor, -1 en caso de error.
-int socket_enviar(socket_t* skt, unsigned char mensaje[TAM_BUFFER],
+int socket_enviar(socket_t* skt, unsigned char buffer[TAM_BUFFER],
 					size_t bytes_a_enviar);
 
 //Pre: skt fue inicializado.

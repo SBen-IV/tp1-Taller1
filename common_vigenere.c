@@ -3,7 +3,6 @@
 void vigenere_encodear(void* key, size_t* pos_key,
 						unsigned char* msg, size_t tope){
 	unsigned char* _key = key;
-
 	size_t len_key = strlen((char*)_key), j = (*pos_key);
 
 	for (size_t i = 0; i < tope; i++, j++) {
