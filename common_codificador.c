@@ -55,7 +55,6 @@ void codificador_desencodear(codificador_t* codificador,
 }
 
 int codificador_destruir(codificador_t* codificador) {
-
 	int valor_ret_destruir = ERROR;
 
 	if (strcmp(codificador->nombre_metodo, METODO_CESAR) == 0){

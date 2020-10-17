@@ -68,7 +68,6 @@ void recibir_mensaje(socket_t* socket, codificador_t* codificador) {
 //Post: Inicia conexion con el cliente.
 void iniciar_conexion(char puerto[TAM_PUERTO], char metodo[TAM_METODO],
 						char key[TAM_KEY]) {
-
 	socket_t socket;
 
 	if (socket_inicializar(&socket, NULL, puerto, AI_PASSIVE) == ERROR) {
@@ -91,7 +90,6 @@ void iniciar_conexion(char puerto[TAM_PUERTO], char metodo[TAM_METODO],
 
 	codificador_destruir(&codificador);
 	socket_destruir(&socket);
-
 }
 
 //Pre: -
