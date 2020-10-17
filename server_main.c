@@ -84,7 +84,7 @@ void iniciar_conexion(char puerto[TAM_PUERTO], char metodo[TAM_METODO],
 		return;
 	}
 
-	if (socket_conectar(&socket) == SUCCESS && 
+	if (socket_enlazar(&socket) == SUCCESS && 
 		socket_conectar_con_cliente(&socket) == SUCCESS) {
 		recibir_mensaje(&socket, &codificador);
 	}

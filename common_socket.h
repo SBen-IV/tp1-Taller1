@@ -10,14 +10,14 @@
 
 #define TAM_BUFFER 64
 
-typedef int (*funcion_enlazadora_t)(int, const struct sockaddr*, socklen_t);
+//typedef int (*funcion_enlazadora_t)(int, const struct sockaddr*, socklen_t);
 
 typedef struct socket{
 	struct addrinfo hints;
 	struct addrinfo* resultado;
 	int file_descriptor;
 	int peer;
-	funcion_enlazadora_t enlazar;
+//	funcion_enlazadora_t enlazar;
 }socket_t;
 
 //Pre: Declarar skt, flag = AI_PASSIVE para servidor, 0 para cliente.
@@ -27,13 +27,15 @@ int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 						int flag);
 
 //Pre: skt inicializado.
-//Post:
-//	- Como cliente: establece conexión con el servidor.
-//	- Como servidor: obtiene un file_descriptor para ser usado por 
-//	socket_conectar_con_cliente.
-//	- En ambos casos devuelve 0 si se completó correctamente, -1 en caso
-//	de error.
+//Post: Establece conexión con el servidor.Devuelve 0 si se completó
+// correctamente, -1 en caso de error.
 int socket_conectar(socket_t* skt);
+
+//Pre: skt inicializado.
+//Post: Obtiene un file_descriptor para ser usado por
+// socket_conectar_con_cliente. Devuelve 0 si se completó correctamente,
+// -1 en caso de error.
+int socket_enlazar(socket_t* skt);
 
 //Pre: skt está enlazado.
 //Post: Devuelve 0 en caso de haber conectado satisfactoriamente con el

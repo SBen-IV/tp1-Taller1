@@ -21,12 +21,6 @@ int socket_inicializar(socket_t* skt, const char* ip, const char* puerto,
 		return ERROR;
 	}
 
-	if (flag == AI_PASSIVE) {
-		skt->enlazar = bind;
-	} else {
-		skt->enlazar = connect;
-	}
-
 	return SUCCESS;
 }
 
@@ -40,7 +34,36 @@ int socket_conectar(socket_t* skt) {
 									resultado_aux->ai_protocol);
 
 		if (skt->file_descriptor != ERROR) {
-			if (skt->enlazar(skt->file_descriptor, resultado_aux->ai_addr,
+			if (connect(skt->file_descriptor, resultado_aux->ai_addr,
+					resultado_aux->ai_addrlen) == SUCCESS) {
+				esta_conectado = true;
+			} else {
+				close(skt->file_descriptor);
+			}
+		}
+
+		resultado_aux = resultado_aux->ai_next;
+	}
+
+	if (!esta_conectado) return ERROR;
+
+	return SUCCESS;
+}
+
+int socket_enlazar(socket_t* skt) {
+	bool esta_conectado = false;
+	struct addrinfo* resultado_aux = skt->resultado;
+
+	while (resultado_aux && !esta_conectado) {
+		skt->file_descriptor = socket(resultado_aux->ai_family,
+									resultado_aux->ai_socktype, 
+									resultado_aux->ai_protocol);
+		int opcion = 1;
+		setsockopt(skt->file_descriptor, SOL_SOCKET, SO_REUSEADDR,
+					&opcion, sizeof(opcion));
+
+		if (skt->file_descriptor != ERROR) {
+			if (bind(skt->file_descriptor, resultado_aux->ai_addr,
 					resultado_aux->ai_addrlen) == SUCCESS) {
 				esta_conectado = true;
 			} else {
