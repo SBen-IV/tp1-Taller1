@@ -8,18 +8,52 @@
 #define SUCCESS 0
 #define ERROR -1
 
-#define BUFFER_VACIO ""
+#define TAM_PUERTO 6
+#define TAM_KEY 256
+
+#define FORMATO_PARAM_METODO "--method="
+#define FORMATO_PARAM_KEY "--key="
+
+#define VACIO ""
 
 //Pre: -
 //Post: copia tiene los mismos bytes que original hasta tope.
-void pasar_bytes(unsigned char copia[TAM_BUFFER],
-				unsigned char original[TAM_BUFFER], size_t tope) {
+void pasar_bytes(unsigned char copia[],
+				unsigned char original[], size_t tope) {
 	for(size_t i = 0; i < tope; i++) copia[i] = original[i];
 }
 
+void pasar_bytes_signed(char copia[], char original[], size_t tope) {
+	for(size_t i = 0; i < tope; i++) copia[i] = original[i];
+}
+
+//Pre: -
+//Post: Valida si parametro tiene el formato de formato_parametro, en tal caso
+//devuelve true, false en caso contrario.
+bool es_parametro_valido(char* parametro, char* formato_parametro) {
+	size_t largo_formato = strlen(formato_parametro),
+			largo_parametro = strlen(parametro);
+
+	if (largo_parametro <= largo_formato) return false;
+
+	size_t i = 0;
+
+	bool son_iguales = true;
+
+	while (son_iguales && i < largo_formato) {
+		if (parametro[i] != formato_parametro[i]) son_iguales = false;
+
+		i++;
+	}
+
+	return son_iguales;
+}
+
+//Pre: socket y codificador inicializados.
+//Post: -
 void recibir_mensaje(socket_t* socket, codificador_t* codificador) {
-	unsigned char buffer[TAM_BUFFER] = BUFFER_VACIO,
-					buffer_desencriptado[TAM_BUFFER] = BUFFER_VACIO;
+	unsigned char buffer[TAM_BUFFER] = VACIO,
+					buffer_desencriptado[TAM_BUFFER] = VACIO;
 	int bytes_recibidos = 0;
 
 	do {
@@ -30,26 +64,24 @@ void recibir_mensaje(socket_t* socket, codificador_t* codificador) {
 		fwrite(buffer_desencriptado, 1, bytes_recibidos, stdout);
 	} while (bytes_recibidos > 0);
 }
-
-int main(int argc, char *argv[]) {
-	if (argc < 4){
-		printf("./server <puerto> --method=<metodo> --key=<key>\n");
-		return 0;
-	}
+//Pre: -
+//Post: Inicia conexion con el cliente.
+void iniciar_conexion(char puerto[TAM_PUERTO], char metodo[TAM_METODO],
+						char key[TAM_KEY]) {
 
 	socket_t socket;
 
-	if (socket_inicializar(&socket, NULL, argv[1], AI_PASSIVE) == ERROR) {
+	if (socket_inicializar(&socket, NULL, puerto, AI_PASSIVE) == ERROR) {
 		perror("Error inicializando socket");
-		return 0;
+		return;
 	}
 
 	codificador_t codificador;
 
-	if (codificador_inicializar(&codificador, &argv[2][9],
-								&argv[3][6]) == ERROR) {
-		socket_destruir(&socket);		
-		return 0;
+	if (codificador_inicializar(&codificador, metodo, key) == ERROR) {
+		socket_destruir(&socket);
+		perror("Error inicializando codificador\n");		
+		return;
 	}
 
 	if (socket_conectar(&socket) == SUCCESS && 
@@ -59,6 +91,42 @@ int main(int argc, char *argv[]) {
 
 	codificador_destruir(&codificador);
 	socket_destruir(&socket);
+
+}
+
+//Pre: -
+//Post: Devuelve 0 si el parametro ingresado es valido, -1 en caso contrario.
+int parsear_parametro(char* parametro_ingresado,
+						char* parametro, char* formato_parametro) {
+	if (es_parametro_valido(parametro_ingresado, formato_parametro)) {
+		size_t inicio_parametro_ingresado = strlen(formato_parametro);
+		pasar_bytes_signed(parametro,
+					&(parametro_ingresado[inicio_parametro_ingresado]),
+					strlen(&(parametro_ingresado[inicio_parametro_ingresado]))
+					 + 1);
+
+		return SUCCESS;
+	}
+
+	return ERROR;
+}
+
+int main(int argc, char *argv[]) {
+	if (argc < 4){
+		printf("./server <puerto> --method=<metodo> --key=<key>\n");
+		return 0;
+	}
+	char puerto[TAM_PUERTO] = VACIO;
+
+	pasar_bytes_signed(puerto, argv[1], strlen(argv[1]) + 1);
+
+	char metodo[TAM_METODO] = VACIO, key[TAM_KEY] = VACIO;
+
+	if (parsear_parametro(argv[2], metodo, FORMATO_PARAM_METODO) != ERROR && 
+		parsear_parametro(argv[3], key, FORMATO_PARAM_KEY) != ERROR) {
+		iniciar_conexion(puerto, metodo, key);
+	}
+
 
 	return 0;
 }
