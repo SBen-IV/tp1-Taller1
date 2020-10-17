@@ -1,28 +1,37 @@
 #include "common_vigenere.h"
 
-void vigenere_encodear(void* key, size_t* pos_key,
-						unsigned char* msg, size_t tope){
-	unsigned char* _key = key;
-	size_t len_key = strlen((char*)_key), j = (*pos_key);
+#define SUCCESS 0
 
-	for (size_t i = 0; i < tope; i++, j++) {
-		if (j == len_key) j = 0;
-		msg[i] = (msg[i] + _key[j])%256;
-	}
+#define TAM_ABECEDARIO 256
 
-	(*pos_key) = j;
+int vigenere_inicializar(vigenere_t* vigenere, void* key) {
+	vigenere->key = key;
+	vigenere->largo_key = strlen((char*)vigenere->key);
+	vigenere->pos_key = 0;
+
+	return SUCCESS;
 }
 
-void vigenere_desencodear(void* key, size_t* pos_key,
-						unsigned char* msg, size_t tope){
-	unsigned char* _key = key;
+void vigenere_encodear(vigenere_t* vigenere, unsigned char* mensaje,
+						size_t largo_mensaje) {
+	for (size_t i = 0; i < largo_mensaje; i++, vigenere->pos_key++) {
+		if (vigenere->pos_key == vigenere->largo_key) vigenere->pos_key = 0;
 
-	size_t len_key = strlen((char*)_key), j = (*pos_key);
-
-	for (size_t i = 0; i < tope; i++, j++) {
-		if (j == len_key) j = 0;
-		msg[i] = (msg[i] - _key[j])%256;
+		mensaje[i] = (mensaje[i] + vigenere->key[vigenere->pos_key])
+						% TAM_ABECEDARIO;
 	}
+}
 
-	(*pos_key) = j;
+void vigenere_desencodear(vigenere_t* vigenere,	unsigned char* mensaje,
+						size_t largo_mensaje) {
+	for (size_t i = 0; i < largo_mensaje; i++, vigenere->pos_key++) {
+		if (vigenere->pos_key == vigenere->largo_key) vigenere->pos_key = 0;
+
+		mensaje[i] = (mensaje[i] - vigenere->key[vigenere->pos_key])
+						% TAM_ABECEDARIO;
+	}
+}
+
+int vigenere_destruir(vigenere_t* vigenere) {
+	return SUCCESS;
 }

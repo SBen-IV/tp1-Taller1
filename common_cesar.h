@@ -1,8 +1,18 @@
 #ifndef _COMMON_CESAR_H_
 #define _COMMON_CESAR_H_
 
-void cesar_encodear(void* key, unsigned char* msg, size_t tope);
+typedef struct cesar{
+	int key;
+}cesar_t;
 
-void cesar_desencodear(void* key, unsigned char* msg, size_t tope);
+int cesar_inicializar(cesar_t* cesar, void* key);
+
+void cesar_encodear(cesar_t* cesar, unsigned char* mensaje,
+					size_t largo_mensaje);
+
+void cesar_desencodear(cesar_t* cesar, unsigned char* mensaje,
+						size_t largo_mensaje);
+
+int cesar_destruir(cesar_t* cesar);
 
 #endif

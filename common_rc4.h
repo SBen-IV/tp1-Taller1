@@ -6,7 +6,11 @@
 
 #define TAM_S_BOX 256
 
-void rc4_inicializar(unsigned char s_box[TAM_S_BOX], void* key);
+typedef struct rc4{
+	int key;
+}rc4_t;
+
+void rc4_inicializar(rc4_t* rc4, void* key);
 
 void rc4_encodear(void* key, size_t* pos_key_1, size_t* pos_key_2,
 					unsigned char* buffer, size_t tope,

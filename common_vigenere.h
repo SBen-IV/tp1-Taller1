@@ -4,10 +4,20 @@
 #include <stddef.h>
 #include <string.h>
 
-void vigenere_encodear(void* key, size_t* pos_key,
-						unsigned char* msg, size_t tope);
+typedef struct vigenere{
+	unsigned char* key;
+	size_t largo_key;
+	size_t pos_key;
+}vigenere_t;
 
-void vigenere_desencodear(void* key, size_t* pos_key,
-							unsigned char* msg, size_t tope);
+int vigenere_inicializar(vigenere_t* vigenere, void* key);
+
+void vigenere_encodear(vigenere_t* vigenere,
+						unsigned char* mensaje, size_t largo_mensaje);
+
+void vigenere_desencodear(vigenere_t* vigenere,
+							unsigned char* mensaje, size_t largo_mensaje);
+
+int vigenere_destruir(vigenere_t* vigenere);
 
 #endif

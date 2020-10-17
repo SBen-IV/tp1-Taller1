@@ -10,36 +10,34 @@
 
 int codificador_inicializar(codificador_t* codificador, char* metodo,
 							void* key) {
-	codificador->key = key;
-	codificador->pos_key_1 = codificador->pos_key_2 = 0;
-	memset(codificador->s_box, 0, sizeof(codificador->s_box));
-	rc4_inicializar(codificador->s_box, codificador->key);
+	strncpy(codificador->nombre_metodo, metodo, strlen(metodo) + 1);
+	int valor_ret_inicializar = ERROR;
 
-	if ((strcmp(metodo, METODO_CESAR) == 0) ||
-		(strcmp(metodo, METODO_VIGENERE) == 0) ||
-		(strcmp(metodo, METODO_RC4) == 0)) {
-		strncpy(codificador->nombre_metodo, metodo, strlen(metodo) + 1);
-
-		return SUCCESS;
+	if (strcmp(metodo, METODO_CESAR) == 0){
+		valor_ret_inicializar = cesar_inicializar(&(codificador->cesar), key);
+	} else if (strcmp(metodo, METODO_VIGENERE) == 0){
+		valor_ret_inicializar = vigenere_inicializar(&(codificador->vigenere),
+													key);
+	} else if (strcmp(metodo, METODO_RC4) == 0) {
+		valor_ret_inicializar = rc4_inicializar(&(codificador->rc4), key);
 	}
 
-	return ERROR;
+	return valor_ret_inicializar;
 }
 
 void codificador_encodear(codificador_t* codificador,
 						unsigned char mensaje[TAM_MENSAJE],
 						size_t largo_mensaje) {
 	if (strcmp(codificador->nombre_metodo, METODO_CESAR) == 0) {
-		cesar_encodear(codificador->key, mensaje, largo_mensaje);
+		cesar_encodear(&(codificador->cesar), mensaje, largo_mensaje);
 
 	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0) {
-		vigenere_encodear(codificador->key, &(codificador->pos_key_1),
-							mensaje, largo_mensaje);
-		
+		vigenere_encodear(&(codificador->vigenere), mensaje, largo_mensaje);
+
 	} else if (strcmp(codificador->nombre_metodo, METODO_RC4) == 0) {
-		rc4_encodear(codificador->key, &(codificador->pos_key_1),
-		 			&(codificador->pos_key_2), mensaje, largo_mensaje,
-		 			codificador->s_box);
+	//	rc4_encodear(codificador->key, &(codificador->pos_key_1),
+	//	 			&(codificador->pos_key_2), mensaje, largo_mensaje,
+	//	 			codificador->s_box);
 	}
 }
 
@@ -47,16 +45,15 @@ void codificador_desencodear(codificador_t* codificador,
 							unsigned char mensaje[TAM_MENSAJE],
 							size_t largo_mensaje) {
 	if (strcmp(codificador->nombre_metodo, METODO_CESAR) == 0) {
-		cesar_desencodear(codificador->key, mensaje, largo_mensaje);
+		cesar_desencodear(&(codificador->cesar), mensaje, largo_mensaje);
 
 	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0) {
-		vigenere_desencodear(codificador->key, &(codificador->pos_key_1),
-							mensaje, largo_mensaje);
+		vigenere_desencodear(&(codificador->vigenere), mensaje, largo_mensaje);
 		
 	} else if (strcmp(codificador->nombre_metodo, METODO_RC4) == 0) {
-		rc4_desencodear(codificador->key, &(codificador->pos_key_1),
-						&(codificador->pos_key_2), mensaje, largo_mensaje,
-						codificador->s_box);
+	//	rc4_desencodear(codificador->key, &(codificador->pos_key_1),
+	//					&(codificador->pos_key_2), mensaje, largo_mensaje,
+	//					codificador->s_box);
 	}
 }
 

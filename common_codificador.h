@@ -10,11 +10,10 @@
 #define TAM_MENSAJE 64
 
 typedef struct codificador{
-	void* key;
-	size_t pos_key_1;
-	size_t pos_key_2;
+	cesar_t cesar;
+	vigenere_t vigenere;
+	rc4_t rc4;
 	char nombre_metodo[TAM_METODO];
-	unsigned char s_box[TAM_S_BOX];
 }codificador_t;
 
 int codificador_inicializar(codificador_t* codificador,
