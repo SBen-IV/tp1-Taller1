@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define TAM_BUFFER 5
+#define TAM_BUFFER 64
 
 typedef int (*funcion_enlazadora_t)(int, const struct sockaddr*, socklen_t);
 
@@ -40,21 +40,20 @@ int socket_conectar(socket_t* skt);
 //cliente, -1 en caso contrario.
 int socket_conectar_con_cliente(socket_t* skt);
 
-//Pre: skt se enlazó.
+//Pre: skt inicializado y conectado con cliente.
 //Post: Devuelve la cantidad de bytes recibidos, 0 en caso de que
 //se haya perdido la conexión con el cliente, -1 en caso de error.
 int socket_recibir(socket_t* skt, unsigned char buffer[TAM_BUFFER], 
 					size_t bytes_a_recibir);
 
-//Pre: skt inicializado.
-//Post: evuelve la cantidad de bytes enciados, 0 en caso de que
+//Pre: skt inicializado y conectado al servidor.
+//Post: Devuelve la cantidad de bytes enviados, 0 en caso de que
 //se haya perdido la conexión con el servidor, -1 en caso de error.
 int socket_enviar(socket_t* skt, unsigned char buffer[TAM_BUFFER],
 					size_t bytes_a_enviar);
 
-//Pre: skt fue inicializado.
-//Post: devuelve 0 en caso de que se haya podido liberar
-//la memoria que usaba socket, -1 en caso contario.
+//Pre: skt inicializado.
+//Post: Devuelve 0 con skt destruido.
 int socket_destruir(socket_t* skt);
 
 #endif

@@ -13,12 +13,13 @@ int codificador_inicializar(codificador_t* codificador, char* metodo,
 	strncpy(codificador->nombre_metodo, metodo, strlen(metodo) + 1);
 	int valor_ret_inicializar = ERROR;
 
-	if (strcmp(metodo, METODO_CESAR) == 0){
+	if (strcmp(codificador->nombre_metodo, METODO_CESAR) == 0){
 		valor_ret_inicializar = cesar_inicializar(&(codificador->cesar), key);
-	} else if (strcmp(metodo, METODO_VIGENERE) == 0){
+		
+	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0){
 		valor_ret_inicializar = vigenere_inicializar(&(codificador->vigenere),
 													key);
-	} else if (strcmp(metodo, METODO_RC4) == 0) {
+	} else if (strcmp(codificador->nombre_metodo, METODO_RC4) == 0) {
 		valor_ret_inicializar = rc4_inicializar(&(codificador->rc4), key);
 	}
 
@@ -34,10 +35,8 @@ void codificador_encodear(codificador_t* codificador,
 	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0) {
 		vigenere_encodear(&(codificador->vigenere), mensaje, largo_mensaje);
 
-	} else if (strcmp(codificador->nombre_metodo, METODO_RC4) == 0) {
-	//	rc4_encodear(codificador->key, &(codificador->pos_key_1),
-	//	 			&(codificador->pos_key_2), mensaje, largo_mensaje,
-	//	 			codificador->s_box);
+	} else {
+		rc4_encodear(&(codificador->rc4), mensaje, largo_mensaje);
 	}
 }
 
@@ -50,13 +49,22 @@ void codificador_desencodear(codificador_t* codificador,
 	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0) {
 		vigenere_desencodear(&(codificador->vigenere), mensaje, largo_mensaje);
 		
-	} else if (strcmp(codificador->nombre_metodo, METODO_RC4) == 0) {
-	//	rc4_desencodear(codificador->key, &(codificador->pos_key_1),
-	//					&(codificador->pos_key_2), mensaje, largo_mensaje,
-	//					codificador->s_box);
+	} else {
+		rc4_desencodear(&(codificador->rc4), mensaje, largo_mensaje);
 	}
 }
 
 int codificador_destruir(codificador_t* codificador) {
-	return SUCCESS;
+
+	int valor_ret_destruir = ERROR;
+
+	if (strcmp(codificador->nombre_metodo, METODO_CESAR) == 0){
+		valor_ret_destruir = cesar_destruir(&(codificador->cesar));
+	} else if (strcmp(codificador->nombre_metodo, METODO_VIGENERE) == 0){
+		valor_ret_destruir = vigenere_destruir(&(codificador->vigenere));
+	} else {
+		valor_ret_destruir = rc4_destruir(&(codificador->rc4));
+	}
+
+	return valor_ret_destruir;
 }

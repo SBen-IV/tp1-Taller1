@@ -8,13 +8,20 @@
 #define SUCCESS 0
 #define ERROR -1
 
+#define BUFFER_VACIO ""
+
+//Pre: -
+//Post: copia tiene los mismos bytes que original hasta tope.
 void pasar_bytes(unsigned char copia[TAM_BUFFER],
 				unsigned char original[TAM_BUFFER], size_t tope) {
 	for(size_t i = 0; i < tope; i++) copia[i] = original[i];
 }
 
+//Pre: socket y codificador inicializados.
+//Post: -
 void enviar_mensaje(socket_t* socket, codificador_t* codificador) {
-	unsigned char buffer[TAM_BUFFER], buffer_encriptado[TAM_BUFFER];
+	unsigned char buffer[TAM_BUFFER] = BUFFER_VACIO,
+					buffer_encriptado[TAM_BUFFER] = BUFFER_VACIO;
 	int bytes_enviados = 0;
 
 	do {

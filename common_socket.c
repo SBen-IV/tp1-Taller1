@@ -1,7 +1,6 @@
 #define _POSIX_C_SOURCE 200112L
 
 #include "common_socket.h"
-
 #include <stdio.h>
 
 #define ERROR -1

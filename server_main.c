@@ -10,6 +10,8 @@
 
 #define BUFFER_VACIO ""
 
+//Pre: -
+//Post: copia tiene los mismos bytes que original hasta tope.
 void pasar_bytes(unsigned char copia[TAM_BUFFER],
 				unsigned char original[TAM_BUFFER], size_t tope) {
 	for(size_t i = 0; i < tope; i++) copia[i] = original[i];
