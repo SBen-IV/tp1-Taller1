@@ -10,14 +10,11 @@
 
 #define TAM_BUFFER 64
 
-//typedef int (*funcion_enlazadora_t)(int, const struct sockaddr*, socklen_t);
-
 typedef struct socket{
 	struct addrinfo hints;
 	struct addrinfo* resultado;
 	int file_descriptor;
 	int peer;
-//	funcion_enlazadora_t enlazar;
 }socket_t;
 
 //Pre: Declarar skt, flag = AI_PASSIVE para servidor, 0 para cliente.
